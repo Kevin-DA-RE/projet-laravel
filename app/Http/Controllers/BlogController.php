@@ -3,20 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Str;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    public function create ()
+    {
+        return view('blog.create');
+    }
+
+    public function store(Request $request){
+        $post = Post::create([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'slug' => Str::slug($request->input('title'))
+        ]);
+        return redirect()->route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
+    }
+
+    
     public function index (): View {
         return view('blog.index', [
             'posts' => Post::paginate(1)
         ]);
     }
 
-    public function show (string $slug, string $id): RedirectResponse | View
+    public function show (string $slug, string $id): RedirectResponse|View
     {
         $post = Post::findOrFail($id);
         if ($post->slug !== $slug){

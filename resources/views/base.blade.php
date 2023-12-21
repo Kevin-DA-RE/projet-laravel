@@ -23,7 +23,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a @class(['nav-link', 'active' =>  str_starts_with($routeName, 'blog.')]) aria-current="page" href="{{ route('blog.index')}}">Blog</a>
+              <a @class(['nav-link', 'active' =>  str_starts_with($routeName, 'index')]) aria-current="page" href="{{ route('blog.index')}}">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a @class(['nav-link', 'active' =>  str_starts_with($routeName, 'create')]) aria-current="page" href="{{ route('blog.create')}}">New Movie</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">À propos</a>
