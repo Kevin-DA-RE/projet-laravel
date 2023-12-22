@@ -8,7 +8,7 @@
                   <h2> {{$post->title }}</h2>
                   <p>{{ $post->content }}</p>
                   <p>
-                        <a href="{{ route('blog.show', ['slug' => $post->slug, 'id' =>$post->id]) }}" class="btn btn-primary"> Lire la suite</a>
+                        <a href="{{ route('blog.show', ['slug' => $post->slug, 'post' =>$post->id]) }}" class="btn btn-primary"> Lire la suite</a>
                   </p>
              </article>
          @endforeach
