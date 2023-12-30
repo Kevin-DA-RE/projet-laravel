@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Models\Post;
-use Illuminate\Support\Str;
+
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
@@ -15,16 +15,22 @@ class BlogController extends Controller
         return view('blog.create');
     }
 
-    public function store(Request $request){
-        $post = Post::create([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'slug' => Str::slug($request->input('title'))
-        ]);
-        return redirect()->route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
+    public function store(CreatePostRequest $request){
+        $post = Post::create($request->validated());
+        return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a bien été sauvegardé");
     }
 
-    
+    public function edit(Post $post) {
+        return view('blog.edit', [
+            'post' => $post
+        ]);
+    }
+
+    public function update(Post $post, CreatePostRequest $request) {
+        $post->update($request->validated());
+        return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a bien été modifié");
+    }
+
     public function index (): View {
         return view('blog.index', [
             'posts' => Post::paginate(1)
