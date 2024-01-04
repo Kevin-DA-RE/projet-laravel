@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\FormPostRequest;
+use App\Models\Category;
 use App\Models\Post;
 
 use Illuminate\Contracts\View\View;
@@ -15,7 +16,7 @@ class BlogController extends Controller
         return view('blog.create');
     }
 
-    public function store(CreatePostRequest $request){
+    public function store(FormPostRequest $request){
         $post = Post::create($request->validated());
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a bien été sauvegardé");
     }
@@ -26,12 +27,17 @@ class BlogController extends Controller
         ]);
     }
 
-    public function update(Post $post, CreatePostRequest $request) {
+    public function update(Post $post, FormPostRequest $request) {
         $post->update($request->validated());
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a bien été modifié");
     }
 
     public function index (): View {
+        $posts = Post::with('category')->get();
+        foreach($posts as $post){
+            $category = $post->category?->name;
+
+        }
         return view('blog.index', [
             'posts' => Post::paginate(1)
         ]);
