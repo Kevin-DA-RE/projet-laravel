@@ -20,8 +20,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+        <div class="container-fluid collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a @class(['nav-link', 'active' =>  str_starts_with($routeName, 'index')]) aria-current="page" href="{{ route('blog.index')}}">Blog</a>
             </li>
@@ -32,6 +32,22 @@
               <a class="nav-link" href="#">À propos</a>
             </li>
           </ul>
+          <div class="navbar-nav ml-auto">
+              @auth
+                {{ Auth::user()->name }}
+                <form class="nav-item" action="{{ route('auth.logout')}}" method="post">
+                  @method("delete")
+                  @csrf
+                  <button class="text-dark">Se deconnecter</button>
+                </form>
+              @endauth
+
+              @guest
+              <div class="nav-item">
+                <a class="nav-link" href="{{ route('auth.login')}}"> Se connecter</a>
+              </div>                
+              @endguest
+          </div>
         </div>
       </nav>
     <div class="container">

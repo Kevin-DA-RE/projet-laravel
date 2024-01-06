@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -20,11 +21,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('/login', [AuthController::class, 'doLogin']);
+
 Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function() {
     Route::get('/', 'index')->name('index');
-    Route::get('/new', 'create')->name('create');
-    Route::post('/new', 'store');
-    Route::get('/{post}/edit', 'edit')->name('edit');
+    Route::get('/new', 'create')->name('create')->middleware('auth');
+    Route::post('/new', 'store')->middleware('auth');
+    Route::get('/{post}/edit', 'edit')->name('edit')->middleware('auth');
     Route::post('/{post}/edit', 'update');
     Route::get('/{slug}-{post}','show')->where([
         'post' => '[0-9]+',
