@@ -28,7 +28,8 @@ class FormPostRequest extends FormRequest
             'slug' => ['required', 'min:8', 'regex:/^[0-9a-z\-]+$/', Rule::unique('posts')->ignore($this->post)],
             'content' => ['required'],
             'category_id' => ['required', 'exists:categories,id'],
-            'tags' => ['required','exists:tags,id','array']
+            'tags' => ['required','exists:tags,id','array'],
+            'image' => ['image', 'max:2000']
         ];
     }
 
